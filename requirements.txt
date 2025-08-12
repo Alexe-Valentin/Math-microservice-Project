@@ -1,0 +1,21 @@
+Flask
+Flask-SQLAlchemy
+redis
+kafka-python
+prometheus-flask-exporter
+flask-jwt-extended
+PyJWT
+werkzeug
+python-dotenv
+click
+pydantic
+flasgger
+
+# Development-only below (comment/remove for production images)
+pytest
+pytest-cov
+black
+flake8
+mypy
+requests
+
