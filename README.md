@@ -47,19 +47,14 @@ python -m src.cli create-user alice
 ```bash
 python -m src.app
 ```
-
-Your API runs at: [http://127.0.0.1:5000](http://127.0.0.1:5000)
-
 - **Swagger UI:** [http://127.0.0.1:5000/apidocs](http://127.0.0.1:5000/apidocs)
-- **Prometheus:** [http://127.0.0.1:5000/metrics](http://127.0.0.1:5000/metrics)
-
 ---
 
 ## Usage
 
 ### Login and Get a JWT Token
 
-**POST** to `/auth/login` (via Swagger UI or any HTTP client):
+**POST** to `/auth/login` :
 
 ```json
 {
