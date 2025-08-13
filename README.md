@@ -97,27 +97,13 @@ You can test these in Swagger UI after clicking “Authorize” and pasting your
 
 ---
 
-## Docker Support (when ready)
 
-### Build
 
-```bash
-docker build -t math-microservice .
-```
 
-### Run
-
-```bash
-docker run -p 5000:5000 math-microservice
-```
-
-(Optional) Add Redis/Kafka via Docker Compose.
-
----
 
 ## Project Structure
 
-
+```bash
 PythonProject/
 ├─ src/
 │  ├─ __init__.py
@@ -151,7 +137,7 @@ PythonProject/
 ├─ README.md
 └─ requirements.txt
 
-
+```
 ---
 
 ## API Docs
