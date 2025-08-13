@@ -1,137 +1,174 @@
 # Math Microservice – Flask, JWT, Pydantic, Swagger
 
-This is a production-ready microservice for math operations, built in Flask with RESTful APIs, JWT authentication, Pydantic validation, Prometheus monitoring, Redis/Kafka integration, and Swagger UI for documentation/testing.
+A production-ready microservice for math operations, built in Flask with RESTful APIs, JWT authentication, Pydantic validation, Prometheus monitoring, Redis/Kafka integration, and Swagger UI for interactive documentation.
 
 ---
 
 ## Features
 
-- **Power, Fibonacci, Factorial** endpoints (`/api/math/...`)
-- **JWT login** at `/auth/login`
-- **Input validation** and output serialization with Pydantic
-- **SQLite persistence** (via SQLAlchemy)
-- **Redis** (optional, for caching)
-- **Kafka** (optional, for logging/streaming)
-- **Swagger UI** (`/apidocs`) for interactive documentation & live testing
-- **Prometheus metrics** at `/metrics`
-- **Modern codebase:** auto-formatting, linting, type-checking
+- **Endpoints:** Power, Fibonacci, Factorial (`/api/math/...`)
+- **Authentication:** JWT login at `/auth/login`
+- **Validation:** Input validation & output serialization with Pydantic
+- **Persistence:** SQLite via SQLAlchemy
+- **Caching:** Redis (optional)
+- **Streaming/Logging:** Kafka (optional)
+- **Docs:** Swagger UI at `/apidocs`
+- **Monitoring:** Prometheus metrics at `/metrics`
+- **Code Quality:** Auto-formatting, linting, type-checking
 
 ---
 
 ## Quickstart
 
-### 1. **Clone and Install Dependencies**
+### 1. Clone & Install Dependencies
 
 ```bash
 python -m venv .venv
-# Activate your venv (on Windows)
+# Activate your venv (Windows)
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-2. Create the Database
-bash
-Copy
-Edit
+```
+
+### 2. Create the Database
+
+```bash
 python -m src.create_tables
-3. Seed a User
-bash
-Copy
-Edit
+```
+
+### 3. Seed a User
+
+```bash
 python -m src.cli create-user alice
 # Enter and confirm password when prompted
-4. Run the Application
-bash
-Copy
-Edit
+```
+
+### 4. Run the Application
+
+```bash
 python -m src.app
-Your API runs at: http://127.0.0.1:5000
+```
 
-Swagger UI: http://127.0.0.1:5000/apidocs
+Your API runs at: [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
-Prometheus: http://127.0.0.1:5000/metrics
+- **Swagger UI:** [http://127.0.0.1:5000/apidocs](http://127.0.0.1:5000/apidocs)
+- **Prometheus:** [http://127.0.0.1:5000/metrics](http://127.0.0.1:5000/metrics)
 
-Usage
-Login and Get a JWT Token
-POST to /auth/login (Swagger UI or any HTTP client):
+---
 
-json
-Copy
-Edit
+## Usage
+
+### Login and Get a JWT Token
+
+**POST** to `/auth/login` (via Swagger UI or any HTTP client):
+
+```json
 {
   "username": "alice",
   "password": "alice"
 }
-Response: { "access_token": "..." }
+```
 
-Test Endpoints (with JWT)
-All /api/math/... endpoints require the Authorization: Bearer <token> header.
+Response:
 
-Power: /api/math/pow?base=2&exp=8 → { "result": 256 }
+```json
+{ "access_token": "..." }
+```
 
-Fibonacci: /api/math/fib?n=10 → { "result": 55 }
+### Test Endpoints (with JWT)
 
-Factorial: /api/math/factorial?n=5 → { "result": 120 }
+All `/api/math/...` endpoints require the `Authorization: Bearer <token>` header.
 
-You can test these in Swagger UI after clicking “Authorize” and pasting your JWT token (Bearer ...).
+- **Power**: `/api/math/pow?base=2&exp=8` → `{ "result": 256 }`
+- **Fibonacci**: `/api/math/fib?n=10` → `{ "result": 55 }`
+- **Factorial**: `/api/math/factorial?n=5` → `{ "result": 120 }`
 
-Validation
-Missing or invalid input (e.g. n=foo or base=) returns 400 Bad Request with a helpful message.
+You can test these in Swagger UI after clicking “Authorize” and pasting your JWT token (`Bearer ...`).
 
-Authentication errors return 401 Unauthorized.
+---
 
-Development & Testing
-Lint: flake8 src/ tests/
+## Validation
 
-Format: black src/ tests/
+- Missing or invalid input (e.g. `n=foo` or missing `base`) returns **400 Bad Request** with a helpful message.
+- Authentication errors return **401 Unauthorized**.
 
-Type-check: mypy src/
+---
 
-Test: pytest -q
+## Development & Testing
 
-Docker Support (when ready)
-Build:
+- **Lint:** `flake8 src/ tests/`
+- **Format:** `black src/ tests/`
+- **Type-check:** `mypy src/`
+- **Test:** `pytest -q`
 
-bash
-Copy
-Edit
+---
+
+## Docker Support (when ready)
+
+### Build
+
+```bash
 docker build -t math-microservice .
-Run:
+```
 
-bash
-Copy
-Edit
+### Run
+
+```bash
 docker run -p 5000:5000 math-microservice
+```
+
 (Optional) Add Redis/Kafka via Docker Compose.
 
-Project Structure
-pgsql
-Copy
-Edit
+---
+
+## Project Structure
+
+
 PythonProject/
 ├─ src/
-│   ├─ app.py
-│   ├─ cli.py
-│   ├─ config.py
-│   ├─ create_tables.py
-│   ├─ controllers/
-│   ├─ database.py
-│   ├─ models.py
-│   ├─ schemas.py
-│   └─ services.py
+│  ├─ __init__.py
+│  ├─ app.py
+│  ├─ cli.py
+│  ├─ config.py
+│  ├─ create_tables.py
+│  ├─ database.py
+│  ├─ models.py
+│  ├─ schemas.py
+│  ├─ services.py
+│  ├─ controllers/
+│  │  ├─ __init__.py
+│  │  ├─ auth_controller.py      # Handles /auth/login (JWT authentication)
+│  │  └─ math_controller.py      # Handles /api/math/{pow,fib,factorial}
+│  └─ utils/
+│     ├─ __init__.py
+│     ├─ cache.py                 # Redis cache integration
+│     └─ kafka_logger.py          # Kafka logging integration
+│
 ├─ instance/
-│   └─ requests.db
-├─ requirements.txt
-└─ tests/
-API Docs
-Visit http://127.0.0.1:5000/apidocs
+│  └─ requests.db                 # SQLite database file (created at runtime)
+│
+├─ tests/
+│  ├─ __init__.py
+│  ├─ conftest.py                  # Pytest fixtures (auto JWT, test client)
+│  └─ test_math_api.py             # Tests for math endpoints
+│
+├─ .flake8
+├─ mypy.ini
+├─ README.md
+└─ requirements.txt
 
-Click “Authorize” (lock icon) and paste Bearer <token>
 
-Try endpoints interactively!
+---
 
-Notes
-Redis and Kafka are optional; the app will gracefully degrade if not present.
+## API Docs
 
-All validation and serialization is now handled by Pydantic for safety and maintainability.
+- Visit [http://127.0.0.1:5000/apidocs](http://127.0.0.1:5000/apidocs)
+- Click “Authorize” (lock icon) and paste `Bearer <token>`
+- Try endpoints interactively!
 
-You can extend the service with new endpoints and models easily!
+---
 
+## Notes
+
+- Redis and Kafka are optional; the app will gracefully degrade if not present.
+- All validation and serialization is handled by Pydantic for safety and maintainability.
+- You can extend the service with new endpoints and models easily!
